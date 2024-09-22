@@ -18,4 +18,3 @@ Description:
 Software used:
 •	Eclipse Workspace
 •	Java AWT Package
-•	Canvas package
