@@ -17,12 +17,12 @@ class userData{
 		head = null;
 	}
 	
-	void addData(String name) {
+	void addData(String name,String patta,String phoneNo,String docNo) {
 		Node L = new Node();
 		L.name = name;
-		L.patta = " ";
-		L.phoneNo = " ";
-		L.docNo = " ";
+		L.patta = patta;
+		L.phoneNo = phoneNo;
+		L.docNo = docNo;
 		if(head == null) {
 			head = L;
 		}
@@ -66,10 +66,12 @@ public class searchMain extends Frame implements ItemListener,ActionListener{
 	int[] surveyNumberList = {123, 456, 789};
 
 	public searchMain() {
-		obj.addData("Hello hielsafjbKDFkjBdfkjSDFHjSFLKAF");
-		obj.addData("World");
-		obj.addData("Hii");
-		obj.addData("Pro");
+		obj.addData("Nitish", "110", "9876543210", "1");
+		obj.addData("Kumaresan", "120", "1234567890", "2");
+		obj.addData("Karthik", "130", "2345678901", "3");
+		obj.addData("Mohan", "140", "3456789012", "4");
+		obj.addData("Naveenkumar", "150", "4567890123", "5");
+		obj.addData("Mithik", "160", "5678901234", "6");;
 		
 		setLayout(new GridBagLayout());
 		setSize(new Dimension(600, 600));
@@ -177,21 +179,33 @@ public class searchMain extends Frame implements ItemListener,ActionListener{
 		if(source == propertyHolder) {
 			l1.setVisible(true);
 			propertyHoldertf.setVisible(true);
+			documentNotf.setVisible(false);
+			phoneNotf.setVisible(false);
+			surveyNotf.setVisible(false);
 			choice = 1;
 		} 
 		else if(source == phoneNo) {
 			l2.setVisible(true);
-			documentNotf.setVisible(true);
+			phoneNotf.setVisible(true);
+			propertyHoldertf.setVisible(false);
+			documentNotf.setVisible(false);
+			surveyNotf.setVisible(false);
 			choice = 2;
 		} 
 		else if(source == documentNo) {
 			l3.setVisible(true);
-			phoneNotf.setVisible(true);
+			documentNotf.setVisible(true);
+			propertyHoldertf.setVisible(false);
+			phoneNotf.setVisible(false);
+			surveyNotf.setVisible(false);
 			choice = 3;
 		} 
 		else if(source == surveyNo) {
 			l4.setVisible(true);
 			surveyNotf.setVisible(true);
+			propertyHoldertf.setVisible(false);
+			documentNotf.setVisible(false);
+			phoneNotf.setVisible(false);
 			choice = 4;
 		}
 		revalidate();
@@ -235,18 +249,18 @@ public class searchMain extends Frame implements ItemListener,ActionListener{
 			Node current = obj.head;
 			int x = 50,y = 200;
 			while(current != null) {
-				if(current.name.compareTo(pName)==0 || current.phoneNo.compareTo(pName)==0 || current.docNo.compareTo(pName)==0 || current.patta.compareTo(pName)==0) {
+				if(current.name.compareToIgnoreCase(pName)==0 || current.phoneNo.compareToIgnoreCase(pName)==0 || current.docNo.compareToIgnoreCase(pName)==0 || current.patta.compareToIgnoreCase(pName)==0) {
 					g.setColor(Color.GREEN);
 					userFound = false;
 				}
 				else {
 					g.setColor(Color.BLACK);
 				}
-				int rectWidth = current.name.length()*10+20;
-				g.drawRect(x-10, y, rectWidth, 30);
-				g.drawString(current.name, x+10, y+20);
+				int rectWidth = current.docNo.length()*10+20;
+				g.drawRect(x, y, rectWidth, 30);
+				g.drawString(current.docNo, x+10, y+20);
 				if (current.next != null) {
-					int arrowStartX = x + rectWidth - 10; 
+					int arrowStartX = x + rectWidth ; 
 					int arrowEndX = arrowStartX + 30;
 					g.drawLine(arrowStartX, y + 15, arrowEndX, y + 15);
 					g.drawLine(arrowEndX - 5, y + 10, arrowEndX, y + 15); 
