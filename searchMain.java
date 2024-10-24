@@ -1,33 +1,40 @@
-package propertySearch;
+package propertySearch2;
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class Node{
-	String name,phoneNo,patta,docNo;
-	Node next;
-	Node(){
+class Node1{
+	String name,phoneNumber,patta,docNo,location,landType,nearBy;
+	double area,price;
+	Node1 next;
+	Node1(){
 		next = null;
 	}
 }
 
 class userData{
-	Node head;
+	Node1 head;
 	userData(){
 		head = null;
 	}
 	
-	void addData(String name,String patta,String phoneNo,String docNo) {
-		Node L = new Node();
+	void addData(String landType,String nearBy,double area,double price,String name,String phoneNumber,String patta,String docNo,String location) {
+		Node1 L = new Node1();
+		L.landType = landType;
+		L.nearBy = nearBy;
+		L.area = area;
+		L.price = price;
 		L.name = name;
+		L.phoneNumber = phoneNumber;
 		L.patta = patta;
-		L.phoneNo = phoneNo;
-		L.docNo = docNo;
+		L.docNo = docNo;		
+		L.location = location;
+		
 		if(head == null) {
 			head = L;
 		}
 		else {
-			Node temp = head;
+			Node1 temp = head;
 			while(temp.next != null) {
 				temp = temp.next;
 			}
@@ -35,12 +42,12 @@ class userData{
 		}
 	}
 	
-	Node sendHead() {
+	Node1 sendHead() {
 		return head;
 	}
 	
 	void display() {
-		Node temp = head;
+		Node1 temp = head;
 		while(temp != null) {
 			System.out.println(temp.name);
 			temp = temp.next;
@@ -49,63 +56,71 @@ class userData{
 	
 }
 
-public class searchMain extends Frame implements ItemListener,ActionListener{
+
+public class searchMain2 extends Frame implements ItemListener,ActionListener{
 	GridBagConstraints gbc = new GridBagConstraints();
-	Checkbox propertyHolder, phoneNo, documentNo, surveyNo;
-	TextField propertyHoldertf, phoneNotf, documentNotf, surveyNotf;
+	Checkbox landType, landSize, documentNo, surveyNo;
+	TextField landSizetf, documentNotf, surveyNotf;
+	Choice landTypeChoice;
 	CheckboxGroup buttonGrp = new CheckboxGroup();
 	Label l0, l1, l2, l3, l4;
 	Button search;
+	Image img;
 	userData obj = new userData();
-	String pName = "";
+	String tempString1,tempString2,tempString3,tempString4;
 	int choice = 1;
-	boolean shouldPaint = false;
-	String[] holderNameList = {"nitish", "karthik", "kumaresan"};
-	int[] phoneNumberList = {11111, 22222, 33333};
-	int[] documentNumberList = {1, 2, 3};
-	int[] surveyNumberList = {123, 456, 789};
-
-	public searchMain() {
-		obj.addData("Nitish", "110", "9876543210", "1");
-		obj.addData("Kumaresan", "120", "1234567890", "2");
-		obj.addData("Karthik", "130", "2345678901", "3");
-		obj.addData("Mohan", "140", "3456789012", "4");
-		obj.addData("Naveenkumar", "150", "4567890123", "5");
-		obj.addData("Mithik", "160", "5678901234", "6");;
+	boolean shouldPaint = false,icon = true;
+	
+	public searchMain2() {
+		obj.addData("Agriculture", "Super market", 1000, 550000.95, "Nitish", "1234567890", "100", "1", "Kamaraj street, Perundurai");
+		obj.addData("Residential", "Hospital", 2000, 650000.95, "Kumaresan", "2345678901", "101", "2", "Raja street, Thiruppur");
+		obj.addData("Commercial", "Airport", 3000, 750000.95, "Karthik", "3456789012", "102", "3", "Jayam nagar, VIP city, Karur");
+		obj.addData("Non agricultural", "Malls", 4000, 850000.95, "MohanRaja", "4567890123", "103", "4", "Capital city, Salem");
 		
 		setLayout(new GridBagLayout());
 		setSize(new Dimension(600, 600));
 		setTitle("Property Search Toolkit");
+		
+		img = Toolkit.getDefaultToolkit().getImage("C:\\Users\\nitis\\Downloads\\bg.jpg");
 
+		
 		l0 = new Label("Select any one of the method :");
-		propertyHolder = new Checkbox("Holder name", buttonGrp, true);
-		phoneNo = new Checkbox("Phone number", buttonGrp, false);
+		landType = new Checkbox("Land type", buttonGrp, true);
+		landSize = new Checkbox("Based on land size", buttonGrp, false);
 		documentNo = new Checkbox("Document number", buttonGrp, false);
 		surveyNo = new Checkbox("Patta/Survey number", buttonGrp, false);
-		l1 = new Label("Enter property holder name : ");
-		l2 = new Label("Enter your phone number : ");
+		
+		l1 = new Label("Enter the type of land : ");
+		l2 = new Label("Enter your land size preference : ");
 		l3 = new Label("Enter your document number : ");
 		l4 = new Label("Enter your patta/survey number : ");
+		
 		search = new Button("Search");
-		propertyHoldertf = new TextField(20);
-		phoneNotf = new TextField(20);
+		landTypeChoice = new Choice();
+		landTypeChoice.add("Agriculture");
+		landTypeChoice.add("Residential");
+		landTypeChoice.add("Commercial");
+		landTypeChoice.add("Non agricultural");
+		
+		landSizetf = new TextField(20);
 		documentNotf = new TextField(20);
 		surveyNotf = new TextField(20);
-		propertyHolder.addItemListener(this);
-		phoneNo.addItemListener(this);
+		
+		landType.addItemListener(this);
+		landSize.addItemListener(this);
 		documentNo.addItemListener(this);
 		surveyNo.addItemListener(this);
 		search.addActionListener(this);
-
+		
 		l1.setVisible(true);
 		l2.setVisible(false);
 		l3.setVisible(false);
 		l4.setVisible(false);
-		propertyHoldertf.setVisible(true);
+		landTypeChoice.setVisible(true);
 		documentNotf.setVisible(false);
-		phoneNotf.setVisible(false);
+		landSizetf.setVisible(false);
 		surveyNotf.setVisible(false);
-
+		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 4;
@@ -118,10 +133,10 @@ public class searchMain extends Frame implements ItemListener,ActionListener{
 		gbc.gridwidth = 1;
 		gbc.gridy = 1;
 		gbc.gridx = 0;
-		add(propertyHolder, gbc);
+		add(landType, gbc);
 
 		gbc.gridx = 1;
-		add(phoneNo, gbc);
+		add(landSize, gbc);
 
 		gbc.gridx = 2;
 		add(documentNo, gbc);
@@ -142,9 +157,9 @@ public class searchMain extends Frame implements ItemListener,ActionListener{
 		gbc.gridy = 2;
 		gbc.gridwidth = 4;
 		gbc.anchor = GridBagConstraints.NORTHWEST;
-		add(propertyHoldertf, gbc);
+		add(landTypeChoice, gbc);
 		add(documentNotf, gbc);
-		add(phoneNotf, gbc);
+		add(landSizetf, gbc);
 		add(surveyNotf, gbc);
 		
 		gbc.gridx = 2;
@@ -158,73 +173,100 @@ public class searchMain extends Frame implements ItemListener,ActionListener{
 		gbc.weighty = 1.0;
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		add(new Label(), gbc);
+		
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent we) {
 				System.exit(0);
 			}
 		});
+		
 	}
-
+	
 	public void itemStateChanged(ItemEvent ie) {
 		l1.setVisible(false);
 		l2.setVisible(false);
 		l3.setVisible(false);
 		l4.setVisible(false);
-		propertyHoldertf.setVisible(false);
+		
+		landTypeChoice.setVisible(false);
 		documentNotf.setVisible(false);
-		phoneNotf.setVisible(false);
+		landSizetf.setVisible(false);
 		surveyNotf.setVisible(false);
 		Checkbox source = (Checkbox) ie.getSource();
-		if(source == propertyHolder) {
+		
+		if(source == landType) {
+			l2.setVisible(false);
+			l3.setVisible(false);
+			l4.setVisible(false);
 			l1.setVisible(true);
-			propertyHoldertf.setVisible(true);
 			documentNotf.setVisible(false);
-			phoneNotf.setVisible(false);
+			landSizetf.setVisible(false);
 			surveyNotf.setVisible(false);
+			landTypeChoice.setVisible(true);
 			choice = 1;
+			revalidate();
 		} 
-		else if(source == phoneNo) {
+		else if(source == landSize) {
+			l1.setVisible(false);
+			l3.setVisible(false);
+			l4.setVisible(false);
 			l2.setVisible(true);
-			phoneNotf.setVisible(true);
-			propertyHoldertf.setVisible(false);
+			landSizetf.setVisible(true);
+			landTypeChoice.setVisible(false);
 			documentNotf.setVisible(false);
 			surveyNotf.setVisible(false);
 			choice = 2;
+			revalidate();
 		} 
 		else if(source == documentNo) {
+			l1.setVisible(false);
+			l2.setVisible(false);
+			l4.setVisible(false);
 			l3.setVisible(true);
 			documentNotf.setVisible(true);
-			propertyHoldertf.setVisible(false);
-			phoneNotf.setVisible(false);
+			landTypeChoice.setVisible(false);
+			landSizetf.setVisible(false);
 			surveyNotf.setVisible(false);
 			choice = 3;
+			revalidate();
 		} 
 		else if(source == surveyNo) {
+			l1.setVisible(false);
+			l2.setVisible(false);
+			l3.setVisible(false);
 			l4.setVisible(true);
 			surveyNotf.setVisible(true);
-			propertyHoldertf.setVisible(false);
+			landTypeChoice.setVisible(false);
 			documentNotf.setVisible(false);
-			phoneNotf.setVisible(false);
+			landSizetf.setVisible(false);
 			choice = 4;
+			revalidate();
 		}
-		revalidate();
 	}
 	
 	public void actionPerformed(ActionEvent ae) {
 		shouldPaint = true;
-		repaint();
+		
+		tempString1 = null;
+	    tempString2 = null;
+	    tempString3 = null;
+	    tempString4 = null;
 		if(choice == 1) {
-			pName = propertyHoldertf.getText().toString();
+			tempString1 = landTypeChoice.getSelectedItem().toString();
+			repaint();
 		}
 		else if(choice == 2) {
-			pName = phoneNotf.getText().toString();
+			tempString2 = landSizetf.getText().toString();
+			repaint();
 		}
 		else if(choice == 3) {
-			pName = documentNotf.getText().toString();
+			tempString3 = documentNotf.getText().toString();
+			repaint();
 		}
 		else if(choice == 4) {
-			pName = surveyNotf.getText().toString();
+			tempString4 = surveyNotf.getText().toString();
+			repaint();
 		}
 		else {
 			Dialog dialog1 = new Dialog(new Frame(),"Error",true);
@@ -244,19 +286,106 @@ public class searchMain extends Frame implements ItemListener,ActionListener{
 	}
 	
 	public void paint(Graphics g) {
+		
+		
+		g.clearRect(0, 0, getWidth(), getHeight());
+        g.setColor(getBackground());
+        g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+        
+        
 		boolean userFound = true;
+		int rectWidth = 0;
 		if(shouldPaint) {
-			Node current = obj.head;
+			Node1 current = obj.head;
+			Node1 foundNode = new Node1();
 			int x = 50,y = 200;
 			while(current != null) {
-				if(current.name.compareToIgnoreCase(pName)==0 || current.phoneNo.compareToIgnoreCase(pName)==0 || current.docNo.compareToIgnoreCase(pName)==0 || current.patta.compareToIgnoreCase(pName)==0) {
-					g.setColor(Color.GREEN);
-					userFound = false;
+				if(tempString1 != null) {
+					if(current.landType.compareToIgnoreCase(tempString1)==0) {
+						g.setColor(Color.GREEN);
+						Node1 L = new Node1();
+						L.name = current.name;
+						L.docNo = current.docNo;
+						L.patta = current.patta;
+						L.phoneNumber = current.phoneNumber;
+						L.landType = current.landType;
+						L.price = current.price;
+						L.area = current.area;
+						L.nearBy = current.nearBy;
+						
+						L.next = foundNode;
+						foundNode = L;
+						userFound = false;
+					}
+					else {
+						g.setColor(Color.BLACK);
+					}
 				}
-				else {
-					g.setColor(Color.BLACK);
+				else if(tempString2 != null) {
+					if(current.area >= Double.parseDouble(tempString2)) {
+						g.setColor(Color.GREEN);
+						Node1 L = new Node1();
+						L.name = current.name;
+						L.docNo = current.docNo;
+						L.patta = current.patta;
+						L.phoneNumber = current.phoneNumber;
+						L.landType = current.landType;
+						L.price = current.price;
+						L.area = current.area;
+						L.nearBy = current.nearBy;
+						
+						L.next = foundNode;
+						foundNode = L;
+						userFound = false;
+					}
+					else {
+						g.setColor(Color.BLACK);
+					}
 				}
-				int rectWidth = current.docNo.length()*10+20;
+				else if(tempString3 != null) {
+					if(current.docNo.compareToIgnoreCase(tempString3)==0) {
+						g.setColor(Color.GREEN);
+						Node1 L = new Node1();
+						L.name = current.name;
+						L.docNo = current.docNo;
+						L.patta = current.patta;
+						L.phoneNumber = current.phoneNumber;
+						L.landType = current.landType;
+						L.price = current.price;
+						L.area = current.area;
+						L.nearBy = current.nearBy;
+						
+						L.next = foundNode;
+						foundNode = L;
+						userFound = false;
+					}
+					else {
+						g.setColor(Color.BLACK);
+					}
+					
+				}
+				else if(tempString4 != null) {
+					if(current.patta.compareToIgnoreCase(tempString4)==0) {
+						g.setColor(Color.GREEN);
+						Node1 L = new Node1();
+						L.name = current.name;
+						L.docNo = current.docNo;
+						L.patta = current.patta;
+						L.phoneNumber = current.phoneNumber;
+						L.landType = current.landType;
+						L.price = current.price;
+						L.area = current.area;
+						L.nearBy = current.nearBy;
+						
+						L.next = foundNode;
+						foundNode = L;
+						userFound = false;
+					}
+					else {
+						g.setColor(Color.BLACK);
+					}
+				}
+				rectWidth = current.docNo.length()*10+20;
 				g.drawRect(x, y, rectWidth, 30);
 				g.drawString(current.docNo, x+10, y+20);
 				if (current.next != null) {
@@ -290,11 +419,36 @@ public class searchMain extends Frame implements ItemListener,ActionListener{
                 
                 dialog1.setVisible(true);
 			}
+			else {
+				g.setColor(Color.BLACK);
+				Node1 temp = foundNode;
+				int currentx = 50,currenty = y+rectWidth;
+				g.drawString("Land record details: ", currentx, currenty+50);
+				currentx+=20;
+				currenty+=50;
+				int a = 20,b = 0;
+				while(temp.next != null) {
+					currenty+=20;
+					g.drawString("Name : "+temp.name, currentx+a, currenty+b);
+					currenty+=20;
+					g.drawString("Document number : "+temp.docNo, currentx+a, currenty+b);
+					currenty+=20;
+					g.drawString("Patta number : "+temp.patta, currentx+a, currenty+b);
+					currenty+=20;
+					g.drawString("Land amount : "+String.valueOf(temp.price), currentx+a, currenty+b);
+					currenty+=20;
+					temp = temp.next;
+				}
+			}
 		}
+		revalidate();
 	}
 
+
 	public static void main(String[] args) {
-		searchMain obj = new searchMain();
+		// TODO Auto-generated method stub
+		searchMain2 obj = new searchMain2();
 		obj.setVisible(true);
 	}
+
 }
